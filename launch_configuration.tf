@@ -15,13 +15,26 @@ data "template_file" "ecs_join" {
   }
 }
 
+data "template_file" "efs_mount" {
+  template = "${file("${path.module}/efs_mount.sh")}"
+
+  vars {
+    filesystem_id = "${aws_efs_file_system.efs.id}"
+  }
+}
+
 data "template_cloudinit_config" "user_data" {
-  gzip = true
+  gzip          = true
   base64_encode = true
 
   part {
     content_type = "text/x-shellscript"
-    content = "${data.template_file.ecs_join.rendered}"
+    content      = "${data.template_file.efs_mount.rendered}"
+  }
+
+  part {
+    content_type = "text/x-shellscript"
+    content      = "${data.template_file.ecs_join.rendered}"
   }
 }
 
@@ -36,7 +49,7 @@ resource "aws_launch_configuration" "main" {
   key_name                    = "${var.key_name}"
   security_groups             = ["${aws_security_group.main.id}"]
   associate_public_ip_address = "${var.associate_public_ip_address}"
-  enable_monitoring = false
+  enable_monitoring           = false
 
   # root
   root_block_device {

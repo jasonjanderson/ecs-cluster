@@ -30,7 +30,7 @@ variable "key_name" {
 }
 
 variable "load_balancers" {
-  type = "list"
+  type    = "list"
   default = []
 }
 
@@ -51,18 +51,30 @@ variable "docker_volume_size" {
 
 variable "associate_public_ip_address" {
   description = "Whether or not this ECS cluster will be associated with public IP addresses"
-  default = false
+  default     = false
 }
 
 ## Outputs ##
-output "id" { value = "${aws_ecs_cluster.main.id}"}
+output "id" {
+  value = "${aws_ecs_cluster.main.id}"
+}
 
-output "name" { value = "${aws_ecs_cluster.main.name}"}
+output "name" {
+  value = "${aws_ecs_cluster.main.name}"
+}
 
-output "launch_configuration_id" { value = "${aws_launch_configuration.main.id}" }
+output "launch_configuration_id" {
+  value = "${aws_launch_configuration.main.id}"
+}
 
-output "autoscaling_group_id" { value = "${aws_autoscaling_group.main.id}" }
+output "autoscaling_group_id" {
+  value = "${aws_autoscaling_group.main.id}"
+}
 
-output "autoscaling_group_arn" { value = "${aws_autoscaling_group.main.arn}" }
+output "autoscaling_group_arn" {
+  value = "${aws_autoscaling_group.main.arn}"
+}
 
-output "security_group_id" { value = "${aws_security_group.main.id}" }
+output "security_group_id" {
+  value = "${aws_security_group.main.id}"
+}

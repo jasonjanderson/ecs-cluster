@@ -8,7 +8,7 @@ data "aws_iam_policy_document" "assume_role_policy" {
       identifiers = [
         "ecs.amazonaws.com",
         "ec2.amazonaws.com",
-        "application-autoscaling.amazonaws.com"
+        "application-autoscaling.amazonaws.com",
       ]
     }
 
