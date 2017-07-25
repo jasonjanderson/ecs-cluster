@@ -31,13 +31,14 @@ data "aws_iam_policy_document" "policy" {
       "ecs:StartTask",
       "ecs:DescribeServices",
       "ecs:UpdateService",
+
       "ecr:GetAuthorizationToken",
       "ecr:BatchCheckLayerAvailability",
       "ecr:GetDownloadUrlForLayer",
       "ecr:BatchGetImage",
-      "logs:CreateLogStream",
-      "logs:PutLogEvents",
+
       "autoscaling:*",
+
       "ec2:DescribeInstances",
     ]
 

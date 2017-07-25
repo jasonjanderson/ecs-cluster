@@ -45,13 +45,10 @@ MOUNTPOINT=/efs
 mkdir -p $$MOUNTPOINT
 
 #Mount EFS file system
-mount -t nfs4 $NFS_TARGET:/ $$MOUNTPOINT
+mount -t nfs4 $$NFS_TARGET:/ $$MOUNTPOINT
 
 #Backup fstab
 cp -p /etc/fstab /etc/fstab.back-$$(date +%F)
 
 #Append line to fstab
 echo -e "$$NFS_TARGET:/ \t\t $$MOUNTPOINT \t\t nfs \t\t defaults \t\t 0 \t\t 0" | tee -a /etc/fstab
-
-#Mount the EFS volume
-mount $MOUNTPOINT

@@ -7,25 +7,52 @@ data "aws_ami" "ecs_ami" {
   }
 }
 
-data "template_file" "ecs_join" {
-  template = "${file("${path.module}/ecs_join.sh")}"
+data "template_file" "environment" {
+  template = "${file("${path.module}/scripts/environment.sh")}"
 
   vars {
-    cluster_name = "${aws_ecs_cluster.main.name}"
+    application = "${var.application}"
+    environment = "${var.environment}"
+    role = "${var.role}"
   }
 }
 
 data "template_file" "efs_mount" {
-  template = "${file("${path.module}/efs_mount.sh")}"
+  template = "${file("${path.module}/scripts/efs_mount.sh")}"
 
   vars {
     filesystem_id = "${aws_efs_file_system.efs.id}"
   }
 }
 
+data "template_file" "ecs_join" {
+  template = "${file("${path.module}/scripts/ecs_join.sh")}"
+
+  vars {
+    cluster_name = "${aws_ecs_cluster.main.name}"
+  }
+}
+
+
 data "template_cloudinit_config" "user_data" {
   gzip          = true
   base64_encode = true
+
+  part {
+    content_type = "text/x-shellscript"
+    content      = "${data.template_file.environment.rendered}"
+  }
+
+  part {
+    content_type = "text/x-shellscript"
+    content      = "${file("${path.module}/scripts/awslogs/ecs_logs.sh")}"
+  }
+
+  part {
+    content_type = "text/upstart-job"
+    filename = "awslogs-reconfig"
+    content      = "${file("${path.module}/scripts/awslogs/awslogs.upstart")}"
+  }
 
   part {
     content_type = "text/x-shellscript"
